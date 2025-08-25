@@ -25,15 +25,14 @@ RUN ${VENV_DIR}/bin/pip install --index-url https://download.pytorch.org/whl/cu1
 RUN git clone --depth=1 https://github.com/bmaltais/kohya_ss.git ${KOHYA_DIR}
 
 # Dependencies (lenient: don't fail the build if optional files aren't present)
-RUN ${VENV_DIR}/bin/pip install -r ${KOHYA_DIR}/requirements_linux.txt || true && \
-    ${VENV_DIR}/bin/pip install -r ${KOHYA_DIR}/requirements_runpod.txt || true && \
-    ${VENV_DIR}/bin/pip install xformers || true && \
-    ${VENV_DIR}/bin/pip install bitsandbytes || true
+RUN ${VENV_DIR}/bin/pip install -r ${KOHYA_DIR}/requirements_runpod.txt || \
+    ${VENV_DIR}/bin/pip install -r ${KOHYA_DIR}/requirements_linux.txt
 
 # Default folders and configs
 RUN mkdir -p ${WORKSPACE}/SARAHJACKSON/training_data/{img,log,model} \
            ${KOHYA_DIR}/models ${KOHYA_DIR}/configs/presets
 COPY configs/config.toml ${KOHYA_DIR}/config.toml
+COPY configs/presets/ ${KOHYA_DIR}/configs/presets/
 
 # Startup scripts
 COPY start.sh /start.sh
