@@ -23,10 +23,13 @@ RUN ${VENV_DIR}/bin/pip install --index-url https://download.pytorch.org/whl/cu1
 
 # Kohya GUI
 RUN git clone --depth=1 https://github.com/bmaltais/kohya_ss.git ${KOHYA_DIR}
+RUN git -C ${KOHYA_DIR} submodule update --init --recursive
 
-# Dependencies (lenient: don't fail the build if optional files aren't present)
-RUN ${VENV_DIR}/bin/pip install -r ${KOHYA_DIR}/requirements_runpod.txt || \
-    ${VENV_DIR}/bin/pip install -r ${KOHYA_DIR}/requirements_linux.txt
+# Dependencies (install from repo root so -e ./sd-scripts resolves)
+WORKDIR ${KOHYA_DIR}
+RUN ${VENV_DIR}/bin/pip install -r requirements_runpod.txt || \
+    ${VENV_DIR}/bin/pip install -r requirements_linux.txt
+WORKDIR ${WORKSPACE}
 
 # Default folders and configs
 RUN mkdir -p ${WORKSPACE}/SARAHJACKSON/training_data/{img,log,model} \
