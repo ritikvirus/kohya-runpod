@@ -1,0 +1,9 @@
+[model]
+models_dir = "/opt/kohya_ss/models"
+
+[folders]
+output_dir  = "/workspace/SARAHJACKSON/training_data/model"
+logging_dir = "/workspace/SARAHJACKSON/training_data/log"
+
+[configuration]
+config_dir  = "/workspace/kohya_presets"
